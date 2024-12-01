@@ -1,0 +1,14 @@
+.component-container {
+  display: flex;
+  position: relative;
+}
+.component-button {
+  background-color: var(--dl-color-theme-accent2);
+}
+.component-fragment {
+  display: contents;
+}
+.component-text2 {
+  display: inline-block;
+}
+
