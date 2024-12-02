@@ -168,46 +168,65 @@
       </div>
     </div>
     <script>
-      console.log("im in script")
-      document.getElementById("submit_button").addEventListener("click", async () => {
-        console.log("im gatherringgggg!")
-          // Gather the input the client wrote by id's we wrote in the input place:
-          const word_name = document.getElementById("WordName").value;
-          const word_book = document.getElementById("WordBook").value;
-          const word_place = document.getElementById("WordPlace").value;
-          console.log(word_name)
-          console.log(word_book)
-          console.log(word_place)
-
-          // Create JSON file using the word.model structure
-          const jsonData = {
-              Name: word_name,
-              Book: word_book,
-              WhereInTheBook:word_place
-          };
-
-          try {
-              // send a post request to our routes: 
-              console.log("im here!")
-              const response = await fetch("/api/word", {
-                  method: "POST",
-                  headers: {
-                      "Content-Type": "application/json"
-                  },
-                  body: JSON.stringify(jsonData) // convert JS value to JSON 
-              });
-
-              if (response) {
-                console.log("word created succesfully")
-                alert("CREATED YAY!!!");
-                            } else {
-                  const error = await response.json();
-                  alert(`שגיאה: ${error.message}`);
-              }
-          } catch (err) {
-              console.error("error in the send" , err);
+      document.addEventListener("DOMContentLoaded", () => {
+        console.log("Script is running");
+    
+        document.getElementById("submit_button").addEventListener("click", async (event) => {
+          event.preventDefault(); // למנוע רענון של הדף
+          console.log("Preparing to gather data...");
+    
+          // Gather input values from the form
+          const word_name = document.getElementById("WordName").value.trim();
+          const word_book = document.getElementById("WordBook").value.trim();
+          const word_place = document.getElementById("WordPlace").value.trim();
+    
+          // Print the values to the console for debugging
+          console.log("Word Name:", word_name);
+          console.log("Word Book:", word_book);
+          console.log("Word Place:", word_place);
+    
+          // Validate input fields (check if they're not empty)
+          if (!word_name || !word_book || !word_place) {
+            alert("נא למלא את כל השדות!");
+            return;
           }
+    
+          // Create a JSON object using the provided inputs
+          const jsonData = {
+            Name: word_name,
+            Book: word_book,
+            WhereInTheBook: word_place,
+          };
+    
+          try {
+            console.log("Sending request to the server...");
+            // Send a POST request to the server
+            const response = await fetch("/api/word", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(jsonData), // Convert JS object to JSON
+            });
+    
+            // Check the response from the server
+            if (response.ok) {
+              const result = await response.json(); // Parse the response JSON
+              console.log("Word created successfully:", result);
+              alert("המילה נוספה בהצלחה!");
+            } else {
+              const error = await response.json(); // Parse the error response
+              console.error("Error from server:", error);
+              alert(`שגיאה: ${error.message}`);
+            }
+          } catch (err) {
+            // Handle any errors during the fetch process
+            console.error("Error sending request:", err);
+            alert("אירעה שגיאה בזמן שליחת הבקשה לשרת. אנא נסה שוב מאוחר יותר.");
+          }
+        });
       });
-  </script>
+    </script>
+    
   </body>
 </html>

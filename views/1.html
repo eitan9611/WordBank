@@ -115,12 +115,13 @@
                     </label>
                     <input
                       type="text"
-                      id="contact-form-3-name"
+                      id="wordToDelete"
                       placeholder="Name"
                       class="thq-input"
                     />
                   </div>
                   <button
+                    id="submit_button"
                     type="submit"
                     class="contact-form3-button thq-button-filled"
                   >
@@ -137,5 +138,36 @@
         </contact-form3-wrapper>
       </div>
     </div>
-  </body>
+    <script>
+      document.getElementById("submit_button").addEventListener("click", async (event) => {
+    // Prevent the form from reloading the page
+    event.preventDefault();
+
+    // Pick the data the user wrote to delete:
+    const word_ID = document.getElementById("wordToDelete").value;
+    console.log("Word ID:", word_ID);
+
+    try {
+    const response = await fetch("/api/word/" + word_ID, {
+        method: "DELETE",
+    });
+
+    if (response.status === 200) {
+        const result = await response.json();
+        console.log("Word deleted successfully:", result.message);
+        alert("DELETED!!! WOWW!");
+    } else if (response.status === 404) {
+        const error = await response.json();
+        alert(`שגיאה: ${error.message}`);
+    } else {
+        const error = await response.json();
+        alert(`שגיאה: ${error.message}`);
+    }
+} catch (err) {
+    console.error("Error in the delete:", err);
+    alert("שגיאה בלתי צפויה. נסה שוב מאוחר יותר.");
+} 
+});
+  </script>
+</body>
 </html>

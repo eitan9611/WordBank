@@ -2,6 +2,8 @@ const express = require('express')
 const app = express()
 const mongoose = require('mongoose')
 const path = require('path');
+require("dotenv").config();
+
 //------------------------------------------------------------------------------
 //GUI ARCHITECURE:
 // make views 'static
@@ -23,9 +25,21 @@ const WordsRoutes = require("./routes/words.route.js")
 app.use(express.json());
 app.use(express.urlencoded({extended: false}))//to handle with URL and not just json
 //mongoDB_connection: 
-mongoose.connect("mongodb+srv://eitan9611:weizman558@perooshcluster.7osfw.mongodb.net/PerooshCollection?retryWrites=true&w=majority&appName=PerooshCluster")
-.then(() => { console.log("connected to database!")})
-.catch(err => {console.log("connection failed!"+err)})
+const dbUser = process.env.DB_USER;
+const dbPassword = process.env.DB_PASSWORD;
+const dbCluster = process.env.DB_CLUSTER;
+const dbName = process.env.DB_NAME;
+const appName = process.env.DB_APPNAME;
+mongoose.connect(
+    "mongodb+srv://" + dbUser + ":" + dbPassword + "@" + dbCluster + "/" + dbName + "?retryWrites=true&w=majority&appName=" + appName,
+)
+.then(() => {
+    console.log("connected to database!");
+})
+.catch(err => {
+    console.log("connection failed!\n" + err);
+});
+
 //Routes:
 app.use("/api/words",WordsRoutes)
 app.use("/api/word",WordRoutes)
