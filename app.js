@@ -16,7 +16,7 @@ app.get('/', (req, res) => {
 app.get('/404', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', '404.html'));
 });
-//-----------------------------------------------------------------------------
+//gsfgsfdvfgnhgbsfdvdfsvgfnhgbfvdfvfd
 // this routes brings us what we made in "routes". 
 // IMPORTANT! in the start of the path- ".." = jump twice above / "." = jump once TO RELATIVE FOLDER (in this case into "PEROOSHPROJ")
 const WordRoutes = require("./routes/word.route.js")
